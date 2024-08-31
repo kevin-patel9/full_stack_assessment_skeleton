@@ -1,0 +1,12 @@
+{
+    "type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "db_user",
+    "password": "6equj5_db_user",
+    "database": "home_db",
+    "synchronize": true,
+    "logging": true,
+    "entities": ["src/entity/*.js"]
+  }
+  
