@@ -16,6 +16,21 @@ services:
     networks:
       - app_net
 
+  backend:
+    build:
+      context: ./backend
+    container_name: node-backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: ["node", "server.js"]
+    depends_on:
+      - mysql_ctn
+    networks:
+      - app_net
+    ports:
+      - "8080:8080"
+
 networks:
   app_net:
 

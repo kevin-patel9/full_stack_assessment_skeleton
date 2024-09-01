@@ -83,7 +83,12 @@ const App = () => {
               <p className="text-sm">Sqft: {home.sqft}</p>
               <p className="text-sm">Beds: {home.beds}</p>
               <p className="text-sm">Baths: {home.baths}</p>
-              <button onClick={() => handleSelectedHome(home.street_address)} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md">
+              <button onClick={() => {
+                  setUserDropdownOpen(false);
+                  handleSelectedHome(home.street_address);
+                }} 
+                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
                 Edit
               </button>
             </div>
