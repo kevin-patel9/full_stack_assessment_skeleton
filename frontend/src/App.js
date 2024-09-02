@@ -1,26 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-import { useFindUserByHomeMutation } from "./services/homeApi";
+import { useFindTotalPageCountMutation, useFindUserByHomeMutation } from "./services/homeApi";
 import UserModal from "./components/Modal";
 import { useGetAllSelectedHomeUserMutation } from "./services/userApi";
 
 const App = () => {
   const [userHomeData, setUserHomeData] = useState([]);
   const [dbUserList, setDbUserList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [userModal, setUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState("None");
   const [selectedHome, setSelectedHome] = useState("");
   const [findUserByHome] = useFindUserByHomeMutation();
+  const [findTotalPageCount] = useFindTotalPageCountMutation();
   const [getAllSelectedHomeUser] = useGetAllSelectedHomeUserMutation();
 
-  const handleFetchUserHome = async (username) => {
-    try {
-      const response = await findUserByHome({ username }).unwrap();
-      setUserHomeData(response?.userHomes);
-    } catch (err) {
-      console.error("Failed to fetch user details:", err);
+  // Fetch user homes and total page count whenever the current page or selected user changes
+  useEffect(() => {
+    if (selectedUser !== "None") {
+      const fetchUserData = async () => {
+        try {
+          const [userResponse, pageCountResponse] = await Promise.all([
+            findUserByHome({ username: selectedUser, page: currentPage }).unwrap(),
+            findTotalPageCount({ username: selectedUser }).unwrap()
+          ]);
+
+          setUserHomeData(userResponse?.userHomes);
+          setTotalPage(pageCountResponse?.totalPages);
+
+        } catch (err) {
+          console.error("Failed to fetch user details:", err);
+        }
+      };
+
+      fetchUserData();
     }
+  }, [selectedUser, currentPage]);
+
+  const handleFetchUserHome = async (username) => {
+    setCurrentPage(1);
     setSelectedUser(username);
     setUserDropdownOpen(false);
   };
@@ -34,7 +54,7 @@ const App = () => {
   const handleSelectedHome = async(homeAddress) => {
     try {
       const response = await getAllSelectedHomeUser({ homeAddress }).unwrap();
-      setDbUserList(response.usernames);
+      setDbUserList(response?.usernames);
       setSelectedHome(homeAddress);
       
     } catch (err) {
@@ -97,6 +117,38 @@ const App = () => {
       ) : (
         <div className="flex justify-center items-center h-64">Nothing to show</div>
       )}
+
+      {userHomeData?.homes?.length > 0 &&
+       <div className="flex justify-center items-center mt-4 gap-x-2">
+        {/* Pagination */}
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          &laquo; Previous
+        </button>
+        {Array.from({ length: totalPage }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`px-4 py-2 border border-gray-300 rounded-md ${
+              currentPage === index + 1
+                ? 'bg-blue-500 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPage}
+          className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Next &raquo;
+        </button>
+      </div>}
       {userModal &&
         <UserModal 
           userModal={userModal} 

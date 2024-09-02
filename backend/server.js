@@ -46,29 +46,60 @@ createConnection({
 
     app.post("/home/find-by-user", async (req, res) => {
       try {
-        const { username } = req.body;
-
-        if (!username)
-          return res.status(400).send({ message: "Username is required" });
-
+        const { username, page = 1 } = req.body;
+        const limit = 50;
+    
         const userRepository = connection.getRepository("User");
         const queryBuilder = userRepository.createQueryBuilder("user");
+    
+        const offset = (parseInt(page) - 1) * limit;
 
-        // Perform LEFT JOIN with the Home entity and filter by username
+        // Perform LEFT JOIN with the Home entity and apply pagination
         const userHomes = await queryBuilder
                 .leftJoinAndSelect("user.homes", "home")
                 .where("user.username = :username", { username })
+                .limit(limit)
+                .offset(offset)
                 .getOne();
-
-        if (!userHomes)
-          return res.status(404).send({ message: "User not found" });
-
+    
+        if (!userHomes) 
+          return res.status(404).send({ message: "Homes not found" });
+    
         res.status(200).send({ userHomes });
       } catch (error) {
         console.error("Error fetching homes by user:", error);
         res.status(500).send({ message: "Error fetching homes by user" });
       }
     });
+    
+    app.post("/home/page-count-by-user", async (req, res) => {
+      try {
+        const { username } = req.body;
+        const limit = 50;
+    
+        // Validate parameters
+        if (limit <= 0) return res.status(400).send({ message: "Limit must be greater than 0" });
+    
+        const userRepository = connection.getRepository("User");
+        const queryBuilder = userRepository.createQueryBuilder("user");
+    
+        // Count the total number of homes for the given user
+        const totalHomes = await queryBuilder
+          .leftJoinAndSelect("user.homes", "home")
+          .where("user.username = :username", { username })
+          .getOne();
+    
+        if (totalHomes.homes.length === 0) return res.status(404).send({ message: "User not found or no homes available" });
+    
+        // Calculate total pages
+        const totalPages = Math.ceil(totalHomes.homes.length / limit);
+    
+        res.status(200).send({ totalPages });
+      } catch (error) {
+        console.error("Error fetching page count by user:", error);
+        res.status(500).send({ message: "Error fetching page count by user" });
+      }
+    });      
 
     app.post("/user/find-by-home", async (req, res) => {
       try {

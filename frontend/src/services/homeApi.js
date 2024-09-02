@@ -18,7 +18,14 @@ export const homeApi = createApi({
         body: userData,
       }),
     }),
+    findTotalPageCount: builder.mutation({
+      query: (username) => ({
+        url: 'page-count-by-user',
+        method: 'POST',
+        body: username,
+      }),
+    }),
   }),
 });
 
-export const { useFindUserByHomeMutation, useUpdateUserForHomeMutation } = homeApi;
+export const { useFindUserByHomeMutation, useUpdateUserForHomeMutation, useFindTotalPageCountMutation } = homeApi;
