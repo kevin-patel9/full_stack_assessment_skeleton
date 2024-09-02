@@ -12,10 +12,13 @@
 2. Get all home according to selected user 
     API integrated (/home/find-by-user)
 
-3. Edit button option selected fetch already selected home
+3. Integrated pagination for homes upto 50 home per screen
+    API integrated (/home/page-count-by-user)
+
+4. Edit button option selected fetch already selected home
     API integrated (/user/find-by-home)
 
-4. Now edit by adding or removing user from selected home
+5. Now edit by adding or removing user from selected home
     API integrated (/home/update-users)
 
 # CREATE DOCKER FILE

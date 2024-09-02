@@ -19,6 +19,9 @@
 4. POST /home/update-users
     --- (update by adding or removing user from selected home)
 
+5. POST /home/page-count-by-user
+    --- (get total number of count for home of the selected user)
+
 # CREATE DOCKER FILE
 
 Added Docker file and the installation process [text](Dockerfile)
