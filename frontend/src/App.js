@@ -63,6 +63,23 @@ const App = () => {
     setUserModal(true);
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo(0, 0);
+  };
+  
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    }
+  };
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPage) {
+      handlePageChange(currentPage + 1);
+    }
+  };
+
   return (
     <div className="h-full my-8 relative">
       <div className="flex justify-end items-center gap-x-3 m-10">
@@ -122,7 +139,7 @@ const App = () => {
        <div className="flex justify-center items-center mt-4 gap-x-2">
         {/* Pagination */}
         <button
-          onClick={() => setCurrentPage(currentPage - 1)}
+          onClick={handlePreviousPage}
           disabled={currentPage === 1}
           className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -131,7 +148,7 @@ const App = () => {
         {Array.from({ length: totalPage }, (_, index) => (
           <button
             key={index + 1}
-            onClick={() => setCurrentPage(index + 1)}
+            onClick={() => handlePageChange(index + 1)}
             className={`px-4 py-2 border border-gray-300 rounded-md ${
               currentPage === index + 1
                 ? 'bg-blue-500 text-white'
@@ -142,7 +159,7 @@ const App = () => {
           </button>
         ))}
         <button
-          onClick={() => setCurrentPage(currentPage + 1)}
+          onClick={handleNextPage}
           disabled={currentPage === totalPage}
           className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
