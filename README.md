@@ -1,3 +1,5 @@
+# before running "docker-compose -f docker-compose.final.yml up --build -d" disable any services running on port 3306 MySQL
+
 # problem was to breakdown the previous db to more modular database
 
 # solution
