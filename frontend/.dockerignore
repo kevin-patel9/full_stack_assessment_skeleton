@@ -1,0 +1,56 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker files and directories
+.docker/
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Dockerfile artifacts
+Dockerfile
+Dockerfile.dev
+Dockerfile.prod
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Next.js build output
+.next/
+
+# Nuxt.js build output
+.nuxt/
+
+# Ember.js build output
+dist/
+
+# Miscellaneous
+*.swp
+*.swo
+*.swn
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git
+.gitignore
+
+# Temporary files
+*.tmp
+*.temp
+*.bak

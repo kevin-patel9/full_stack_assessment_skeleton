@@ -16,6 +16,31 @@ services:
     networks:
       - app_net_2
 
+  backend:
+      build:
+        context: ./backend
+      container_name: node-backend
+      working_dir: /app
+      volumes:
+        - ./backend:/app
+      command: ["node", "server.js"]
+      depends_on:
+        - mysql_ctn_final
+      networks:
+        - app_net_2
+      ports:
+        - "8080:8080"
+
+  frontend:
+      build:
+        context: ./frontend
+      container_name: react-frontend
+      networks:
+        - app_net_2
+      ports:
+        - "3000:3000"
+
+
 networks:
   app_net_2:
 

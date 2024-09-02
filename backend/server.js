@@ -12,7 +12,7 @@ app.use(cors())
 
 createConnection({
   type: "mysql",
-  host: "mysql_ctn",
+  host: "mysql_ctn_final",
   port: 3306,
   username: "db_user",
   password: "6equj5_db_user",
