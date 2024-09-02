@@ -59,3 +59,5 @@ FROM user_home;
 Added the new sql file [text](sql/99_final_db_dump.sql) as per the task
 
 As the docker-compose is already present in [text](docker-compose.final.yml)
+
+And READ me for frontend and backend is av available in its individual folder

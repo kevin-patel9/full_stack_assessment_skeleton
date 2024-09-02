@@ -21,8 +21,6 @@ services:
       context: ./backend
     container_name: node-backend
     working_dir: /app
-    volumes:
-      - ./backend:/app
     command: ["node", "server.js"]
     depends_on:
       - mysql_ctn
